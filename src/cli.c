@@ -119,6 +119,10 @@ encode_args parse_encode_arguments(int argc, char* argv[]) {
         offset++;
     }
 
+    if (args->bitmask == NULL) {
+        args->bitmask = "00000011";
+    }
+
     if (argc > offset) {
         FILE* src = fopen(argv[offset], "rb");
         if (!src) {
@@ -193,6 +197,10 @@ decode_args parse_decode_arguments(int argc, char* argv[]) {
         args->bitmask = calloc(strlen(argv[offset]), sizeof(char));
         strcpy(args->bitmask, argv[offset]);
         offset++;
+    }
+
+    if (args->bitmask == NULL) {
+        args->bitmask = "00000011";
     }
 
     if (argc > offset) {
