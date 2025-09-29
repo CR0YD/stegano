@@ -8,7 +8,14 @@
 #include <lodepng.h>
 #include <stdlib.h>
 #include <cli.h>
+#include <math.h>
 
-int encode(encode_args args);
+/**
+ *
+ * @param args Encode Args struct
+ * @param len Length of Bytes written into
+ * @return 0 no error, 1 could not load image, 2 could not write to image
+ */
+int encode(encode_args args, size_t* len);
 
 #endif //STEGANOGRAPHY_CONFIG_ENCODE_H

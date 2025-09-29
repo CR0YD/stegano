@@ -4,7 +4,8 @@
 
 #include "../include/encode.h"
 
-int encode(encode_args args) {
+int encode(encode_args args, size_t* len) {
+    *len = 0;
     //Load Image
     unsigned char* out;
     unsigned w, h;
@@ -13,32 +14,39 @@ int encode(encode_args args) {
         return 1;
 
     //Encode into image
-    unsigned char bitmask = 8, negative_bitmask = 7;
-    unsigned short bitmask_counter = 0, byte_counter = 0;
-    char value = fgetc(args->src);
-    while (value != EOF) {
-            for (int i = 0; i < 4; ++i) {
+    unsigned char bitmask = 128;
+    unsigned short bitmask_counter = 0, byte_counter = 0, bit_written_counter = 0;
+    char value = (char) fgetc(args->src);
+    while (value != EOF && byte_counter < w * h * 32) {
+            for (int i = 0; i < 8; ++i) {
                 if (args->bitmask[bitmask_counter] == '\0') {
                     bitmask_counter = 0;
-                    bitmask = 8;
-                    negative_bitmask = 7;
                 }
                 if (args->bitmask[bitmask_counter] == '1') {
-                    out[byte_counter] = (value & bitmask)>>i & (out[byte_counter] & negative_bitmask) ;
+                    unsigned char bit = !!(value & bitmask) ? 1 : 0;
+                    bit <<= 7-i;
+                    out[byte_counter] = bit | (out[byte_counter] & (unsigned char) (255 - pow(2,7-i)));
                     bitmask >>= 1;
-                    negative_bitmask = (negative_bitmask >> 1) & 8;
-                    byte_counter++;
+                    bit_written_counter++;
                 }
                 bitmask_counter++;
+                if (bit_written_counter == 7)
+                    break;
             }
-        value = fgetc(args->src);
+        byte_counter++;
+        if (bit_written_counter == 7) {
+            value = (char) fgetc(args->src);
+            bit_written_counter = 0;
+            bitmask = 128;
+            bitmask_counter = 0;
+        }
     }
+    *len = byte_counter;
 
     //Encode Image
     unsigned char* out_image;
     size_t out_size = 0;
     if (lodepng_encode32(&out_image, &out_size,out, w, h))
-    //if (lodepng_encode32_file("/home/jannik/git/stegano/out.png",out, w, h))
         return 2;
 
     //Write to File
