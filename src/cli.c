@@ -300,6 +300,32 @@ cli_args get_arguments(int argc, char* argv[]) {
         return NULL;
     }
 
+    if (argc == 2 && (strcmp(argv[1], "-h") == 0 || strcmp(argv[1], "--help") == 0)) {
+        printf("There's no help for you! But here a little hint ;)\n"
+                        "Usage:\n"
+                        "   stegano <mode> [options] [...]\n"
+                        "   stegano {-h    --help}\n"
+                        "\n"
+                        "Modes:\n"
+                        "   encode              Encodes given data in an image file.\n"
+                        "       stegano encode [options] <src> <img> <out>\n"
+                        "           src         Data that should be encoded.\n"
+                        "           img         Image (png-format) the data should encoded in.\n"
+                        "           out         Output file where the encoded result should go.\n"
+                        "\n"
+                        "   decode              Decodes data from a given image file.\n"
+                        "       stegano decode [options] <-l ...> <src> <out>\n"
+                        "           src         Image (png-format) from which data should be decoded.\n"
+                        "           out         Output file where the decoded data should go.\n"
+                        "           -l          Length (bytes) of the data to decode.\n"
+                        "\n"
+                        "Options:\n"
+                        "   -b                  Bitmask with which the data is de-/encoded. Must be in binary format.\n"
+                        "                       If no bitmask is given, the standard one 00000011 is applied.\n");
+
+        exit(EXIT_SUCCESS);
+    }
+
     cli_args args = calloc(1, sizeof(struct cli_args_struct));
     if (args == NULL) {
         fprintf(stderr, "##ERROR## Failed to allocate memory.\n");
