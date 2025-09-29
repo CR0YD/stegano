@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+const char* STANDARD_BITMASK = "00000011";
+
 char* modesv[] = {"encode", "decode"};
 unsigned char modesc = 2;
 
@@ -120,7 +122,8 @@ encode_args parse_encode_arguments(int argc, char* argv[]) {
     }
 
     if (args->bitmask == NULL) {
-        args->bitmask = "00000011";
+        args->bitmask = calloc(1, strlen(STANDARD_BITMASK) * sizeof(char));
+        strcpy(args->bitmask, STANDARD_BITMASK);
     }
 
     if (argc > offset) {
@@ -200,7 +203,8 @@ decode_args parse_decode_arguments(int argc, char* argv[]) {
     }
 
     if (args->bitmask == NULL) {
-        args->bitmask = "00000011";
+        args->bitmask = calloc(1, strlen(STANDARD_BITMASK) * sizeof(char));
+        strcpy(args->bitmask, STANDARD_BITMASK);
     }
 
     if (strcmp(argv[offset], "-l") == 0 && argc > offset + 1) {
