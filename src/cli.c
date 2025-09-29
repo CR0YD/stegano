@@ -203,6 +203,24 @@ decode_args parse_decode_arguments(int argc, char* argv[]) {
         args->bitmask = "00000011";
     }
 
+    if (strcmp(argv[offset], "-l") == 0 && argc > offset + 1) {
+        args->length = 0;
+        for (unsigned i = 0; i < strlen(argv[offset + 1]); i++) {
+            if (argv[offset + 1][i] - '0' < 0 || argv[offset + 1][i] - '9' > 0) {
+                fprintf(stderr, "##ERROR## Invalid number for option [-l].\n");
+                free_decode_args(&args);
+                return NULL;
+            }
+            args->length = args->length * 10 + (argv[offset + 1][i] - '0');
+        }
+
+        offset++;
+    } else {
+        fprintf(stderr, "##ERROR## Option [-l] missing.\n");
+        free_decode_args(&args);
+        return NULL;
+    }
+
     if (argc > offset) {
         FILE* src = fopen(argv[offset], "r");
         if (!src) {
