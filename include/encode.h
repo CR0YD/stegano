@@ -7,13 +7,7 @@
 #include <stdio.h>
 #include <lodepng.h>
 #include <stdlib.h>
-
-typedef struct {
-    FILE* src;
-    char* img;
-    FILE* out;
-    char* bitmask;
-}* encode_args;
+#include <cli.h>
 
 int encode(encode_args args);
 
