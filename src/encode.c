@@ -14,29 +14,34 @@ int encode(encode_args args, size_t* len) {
 
     //Encode into image
     unsigned char bitmask = 128;
-    unsigned short bitmask_counter = 0, byte_counter = 0, bit_written_counter = 0;
+    unsigned short bitmask_counter = 0, byte_counter = 0, bit_written_counter = 0, bit_counter = 0;
     char value = (char) fgetc(args->src);
     while (value != EOF && byte_counter < w * h * 4) {
-            for (int i = 0; i < 8; ++i) {
-                if (args->bitmask[bitmask_counter] == '\0') {
-                    bitmask_counter = 0;
-                }
-                if (args->bitmask[bitmask_counter] == '1') {
-                    unsigned char bit = !!(value & bitmask) ? 1 : 0;
-                    bit <<= 7-i;
-                    out[byte_counter] = bit | (out[byte_counter] & (char) (255 - pow(2,7-i)));
-                    bitmask >>= 1;
-                    bit_written_counter++;
-                }
-                bitmask_counter++;
-                if (bit_written_counter == 8)
-                    break;
+        for (int i = bit_counter; i < 8; i++, bit_counter++) {
+            if (args->bitmask[bitmask_counter] == '\0') {
+                bitmask_counter = 0;
             }
-        byte_counter++;
+            if (args->bitmask[bitmask_counter] == '1') {
+                unsigned char bit = !!(value & bitmask) ? 1 : 0;
+                const unsigned char current_bit  = 7-i;
+                bit <<= current_bit;
+                out[byte_counter] = bit | (out[byte_counter] & (char) (255 - pow(2,current_bit)));
+                bitmask >>= 1;
+                bit_written_counter++;
+            }
+            bitmask_counter++;
+            if (bit_written_counter == 8) {
+                bit_counter++;
+                break;
+            }
+        }
+        if (bit_counter == 8) {
+            byte_counter++;
+            bit_counter = 0;
+        }
         if (bit_written_counter == 8) {
             value = (char) fgetc(args->src);
             bitmask = 128;
-            bitmask_counter = 0;
             bit_written_counter = 0;
         }
     }
