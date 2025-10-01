@@ -9,7 +9,6 @@ int encode(encode_args args, size_t* len) {
     //Load Image
     unsigned char* out;
     unsigned w, h;
-    //unsigned char* in;
     if (lodepng_decode32_file(&out, &w, &h, args->img))
         return 1;
 
