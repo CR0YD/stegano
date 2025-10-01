@@ -16,7 +16,7 @@ int encode(encode_args args, size_t* len) {
     unsigned char bitmask = 128;
     unsigned short bitmask_counter = 0, byte_counter = 0, bit_written_counter = 0;
     char value = (char) fgetc(args->src);
-    while (value != EOF && byte_counter < w * h * 32) {
+    while (value != EOF && byte_counter < w * h * 4) {
             for (int i = 0; i < 8; ++i) {
                 if (args->bitmask[bitmask_counter] == '\0') {
                     bitmask_counter = 0;
@@ -24,20 +24,20 @@ int encode(encode_args args, size_t* len) {
                 if (args->bitmask[bitmask_counter] == '1') {
                     unsigned char bit = !!(value & bitmask) ? 1 : 0;
                     bit <<= 7-i;
-                    out[byte_counter] = bit | (out[byte_counter] & (unsigned char) (255 - pow(2,7-i)));
+                    out[byte_counter] = bit | (out[byte_counter] & (char) (255 - pow(2,7-i)));
                     bitmask >>= 1;
                     bit_written_counter++;
                 }
                 bitmask_counter++;
-                if (bit_written_counter == 7)
+                if (bit_written_counter == 8)
                     break;
             }
         byte_counter++;
-        if (bit_written_counter == 7) {
+        if (bit_written_counter == 8) {
             value = (char) fgetc(args->src);
-            bit_written_counter = 0;
             bitmask = 128;
             bitmask_counter = 0;
+            bit_written_counter = 0;
         }
     }
     *len = byte_counter;

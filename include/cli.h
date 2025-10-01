@@ -20,6 +20,7 @@ typedef struct decode_args_struct {
     char* src;
     FILE* out;
     char* bitmask;
+    unsigned long length;
 }* decode_args;
 
 typedef union {
