@@ -28,7 +28,7 @@ int encode(encode_args args, size_t* len) {
                 out[byte_counter] = bit | (out[byte_counter] & (char) (255 - pow(2,current_bit)));
                 bitmask >>= 1;
                 bit_written_counter++;
-                len++;
+                (*len)++;
             }
             bitmask_counter++;
             if (bit_written_counter == 8) {
