@@ -11,6 +11,7 @@ unsigned int decode(decode_args decode_struct ) {
     int bit_idx = 7;
     unsigned int bitmask_len = strlen(decode_struct->bitmask);
     unsigned int bitmask_idx = 0;
+    unsigned long read_count = 0;
 
     error = lodepng_decode32_file(&img, &width, &height, filename);
     if (error) {
@@ -32,8 +33,9 @@ unsigned int decode(decode_args decode_struct ) {
                     new_byte = 0;
                     bit_idx = 7;
                 }
+                read_count++;
 
-                if (i >= decode_struct->length) {
+                if (read_count == decode_struct->length) {
                     return EXIT_SUCCESS;
                 }
             }
