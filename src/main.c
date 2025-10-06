@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
         case 0:
             if (!encode(args->args.encode, &bytes)) {
                 printf("Encode successful!\n");
-                printf("%lu bytes written\n", bytes);
+                printf("%lu bits written\n", bytes);
                 break;
             }
             fprintf(stderr, "##ERROR## Could not encode data\n");
