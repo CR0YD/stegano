@@ -228,7 +228,7 @@ decode_args parse_decode_arguments(int argc, char* argv[]) {
             args->length = args->length * 10 + (argv[offset + 1][i] - '0');
         }
 
-        offset++;
+        offset += 2;
     } else {
         fprintf(stderr, "##ERROR## Option [-l] missing.\n");
         free_decode_args(&args);
