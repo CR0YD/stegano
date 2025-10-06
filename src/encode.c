@@ -2,7 +2,7 @@
 // Created by Don Lasagne on 22.09.25.
 //
 
-#include "../include/encode.h"
+#include <encode.h>
 
 int encode(encode_args args, size_t* len) {
     *len = 0;

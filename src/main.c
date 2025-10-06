@@ -15,10 +15,10 @@ int main(int argc, char* argv[]) {
     }
 
 
+    size_t bytes;
     switch (args->mode) {
         case 0:
-            size_t bytes;
-            if (encode(args, &bytes)) {
+            if (encode(args->args.encode, &bytes)) {
                 printf("Encode successful!\n");
                 printf("%lu bytes written\n", bytes);
                 break;
@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
             fprintf(stderr, "##ERROR## Could not encode data\n");
             break;
         case 1:
-            if (decode(args)) {
+            if (decode(args->args.decode)) {
                 printf("Decode successful!\n");
                 break;
             }
