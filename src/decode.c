@@ -1,12 +1,6 @@
 #include <decode.h>
 #include <lodepng.h>
 
-/**
- * decodes the data stored in decode_struct->src with decode_struct->bitmask and stores it in decode_struct->out,
- * reads and writes from left to right
- * @param decode_struct src, out, bitmask, input length from CLI
- * @return 0 if success, else error
- */
 unsigned int decode(decode_args decode_struct ) {
     unsigned error;
     unsigned char* img = 0;
@@ -23,13 +17,6 @@ unsigned int decode(decode_args decode_struct ) {
     if (error) {
         return error;
     }
-
-    //todo nur zum debuggen
-    for (size_t i = 0; i < 88; i++) {
-        printf("%02X ", img[i]);  // Hex-Ausgabe mit führender Null
-        if ((i + 1) % 16 == 0) printf("\n"); // Zeilenumbruch nach 16 Bytes (optional)
-    }
-
 
     for (unsigned int i = 0; i < width * height* 4; i++) { //32 bit pro pixel -> jew 4 (r, g, b, a)
         unsigned char byte = img[i];
