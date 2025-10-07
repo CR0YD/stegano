@@ -36,6 +36,7 @@ unsigned int decode(decode_args decode_struct ) {
                 read_count++;
 
                 if (read_count == decode_struct->length) {
+                    free(img);
                     return EXIT_SUCCESS;
                 }
             }

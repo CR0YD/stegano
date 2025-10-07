@@ -13,7 +13,7 @@
 /**
  *
  * @param args Encode Args struct
- * @param len Length of Bytes written into
+ * @param len Length of bits written
  * @return 0 no error, 1 could not load image, 2 could not write to image
  */
 int encode(encode_args args, size_t* len);
